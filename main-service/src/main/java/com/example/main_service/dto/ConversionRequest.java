@@ -15,6 +15,6 @@ public class ConversionRequest {
     @NotBlank
     private String to;
 
-    @DecimalMin("0.0000")
+    @DecimalMin("0.0")
     private BigDecimal amount;
 }

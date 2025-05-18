@@ -20,3 +20,21 @@ public class RateController {
         return rateService.getExchangeRate(from.toUpperCase(), to.toUpperCase());
     }
 }
+
+/*
+THESE ARE THE ENDPOINTS
+
+Check status
+http://localhost:8082/api/status
+this will return converted amounts, you just have to replace with different currencies
+http://localhost:8082/api/rate?from=USD&to=BMD
+TO GET ALL EXCHANGES RELATED TO PARTICULAR CURRENCY
+https://v6.exchangerate-api.com/v6/a2398286a2bebf4928107bab/latest/eur
+OR
+https://v6.exchangerate-api.com/v6/a2398286a2bebf4928107bab/latest/EUR
+OR
+https://v6.exchangerate-api.com/v6/a2398286a2bebf4928107bab/latest/USD
+OR
+https://v6.exchangerate-api.com/v6/a2398286a2bebf4928107bab/latest/usd
+
+ */

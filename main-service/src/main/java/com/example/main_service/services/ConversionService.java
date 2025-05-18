@@ -43,7 +43,7 @@ public class ConversionService {
             }
         } catch (Exception e) {
             logger.error("Error fetching exchange rate", e);
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch exchange rate.", e);
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to fetch exchange rate: Check The Inputs and Try Again", e);
         }
     }
     public Conversion saveConversion(String from, String to, BigDecimal amount,
@@ -53,6 +53,11 @@ public class ConversionService {
         return repository.save(conversion);
     }
     public ConversionResponse performConversion(ConversionRequest request) {
+
+        //THIS VALIDATES THE REQUEST WHEN TRYING TO CONVERT
+        if (request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Amount Entered Invalid: Amount must be greater than zero.");
+        }
         BigDecimal rate = getExchangeRate(request.getFrom(), request.getTo());
         BigDecimal convertedAmount = request.getAmount().multiply(rate);
         Conversion conversion = saveConversion(

@@ -1,0 +1,45 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    ports:
+      - "5000:5432"
+    environment:
+      POSTGRES_DB: student
+      POSTGRES_USER: irungu
+      POSTGRES_PASSWORD: 123456789
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+
+
+
+
+  rate-service:
+    build:
+      context: ./rate-service
+    container_name: rate-service
+    ports:
+      - "8082:8082"
+    environment:
+      - SERVER_PORT=8082
+    depends_on:
+      - postgres
+
+  main-service:
+    build:
+      context: ./main-service
+    container_name: main-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - rate-service.url=http://rate-service:8082
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5000/student
+      - SPRING_DATASOURCE_USERNAME=irungu
+      - SPRING_DATASOURCE_PASSWORD=123456789
+    depends_on:
+      - rate-service
+      - postgres
+volumes:
+  postgres_data:

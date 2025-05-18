@@ -16,6 +16,6 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception exception) {
-        return new ResponseEntity<>(Map.of("error", "Internal Server Error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(Map.of("error", "Internal Server Error: There was a problem connecting to the Database"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

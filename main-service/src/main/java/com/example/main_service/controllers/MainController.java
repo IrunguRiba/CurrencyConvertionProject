@@ -28,4 +28,22 @@ public class MainController {
         ConversionResponse response = conversionService.performConversion(request);
         return ResponseEntity.ok(response);
     }
+
 }
+
+
+/*These are the endpoints
+
+To check the status
+http://localhost:8080/api/status
+
+This will handle POST
+eg. {
+  "from": "USD",
+  "to": "EUR",
+  "amount": 277
+}
+http://localhost:8080/api/convert
+
+
+ */
