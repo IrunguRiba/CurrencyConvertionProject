@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="exchangeratedatabase" uuid="b2f544be-e5c5-4786-a610-27b664ba22b9">
+    <data-source source="LOCAL" name="exchangeratedb" uuid="daa0ba24-4989-4b8d-807f-c54a322d41b8">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>

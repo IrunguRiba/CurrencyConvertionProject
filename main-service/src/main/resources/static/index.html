@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Currency Converter</title>
+  <style>
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.7);
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #f5f5f5;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+    }
+
+    input, select, button {
+      width: 90%;
+      padding: 10px;
+      margin-top: 5px;
+      background-color: #2c2c2c;
+      border: 1px solid #444;
+      color: white;
+      border-radius: 5px;
+    }
+
+    button {
+      background-color: #6200ea;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    button:hover {
+      background-color: #3700b3;
+    }
+    .output {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #292929;
+      border-radius: 8px;
+      font-size: 1.1em;
+    }
+    .status {
+      text-align: right;
+      font-size: 0.9em;
+      margin-top: 10px;
+      color: #90ee90;
+    }
+
+    .error {
+      color: #ff6b6b;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Currency Converter</h1>
+
+  <div class="status" id="status">Checking status...</div>
+
+  <label for="from">From Currency:</label>
+  <input type="text" id="from" placeholder="e.g. USD">
+
+  <label for="to">To Currency:</label>
+  <input type="text" id="to" placeholder="e.g. EUR">
+
+  <label for="amount">Amount:</label>
+  <input type="number" id="amount" placeholder="e.g. 100">
+
+  <button onclick="convertCurrency()">Convert</button>
+
+  <div class="output" id="output"></div>
+</div>
+
+<script>
+  async function checkStatus() {
+    try {
+      const res = await fetch('http://localhost:8080/api/status');
+      const data = await res.json();
+      document.getElementById('status').textContent = `API Status: ${data.status}`;
+    } catch (error) {
+      document.getElementById('status').textContent = "API Status: DOWN";
+      document.getElementById('status').classList.add('error');
+    }
+  }
+  checkStatus();
+  async function convertCurrency() {
+    const from = document.getElementById('from').value.toUpperCase();
+    const to = document.getElementById('to').value.toUpperCase();
+    const amount = parseFloat(document.getElementById('amount').value);
+    const output = document.getElementById('output');
+    output.innerHTML = '';
+
+    if (!from || !to || isNaN(amount)) {
+      output.innerHTML = '<p class="error">Please fill out all fields correctly.</p>';
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:8080/api/convert', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ from, to, amount })
+      });
+      if (!response.ok) {
+        throw new Error('Conversion failed. Check the inputs');
+      }
+      const data = await response.json();
+      output.innerHTML = `
+                <p><strong>Converted Amount:</strong> ${data.convertedAmount.toFixed(2)}</p>
+                <p><strong>Exchange Rate:</strong> ${data.exchangeRate}</p>
+            `;
+    } catch (error) {
+      output.innerHTML = '<p class="error">Server is busy: Try again later</p>';
+    }
+  }
+</script>
+</body>
+</html>
